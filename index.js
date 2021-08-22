@@ -1770,54 +1770,54 @@ function start_qqbot() {
               }
 
               //我有个朋友
-              if (i_have_a_friend_reg.test(req.body.message)) {
-                //指定目标的话
-                if (has_qq_reg.test(req.body.message)) {
-                  var msg_in = req.body.message.split("说")[1];
-                  var msg = msg_in.split("[CQ:at,qq=")[0].trim();
-                  var who = msg_in.split("[CQ:at,qq=")[1];
-                  var who = who.replace("]", "").trim();
-                  if (is_qq_reg.test(who)) {
-                    var sources = `https://api.sumt.cn/api/qq.logo.php?qq=${who}`; //载入头像
-                  }
-                  //没指定目标
-                } else {
-                  var msg = req.body.message.split("说")[1];
-                  var sources = `https://api.sumt.cn/api/qq.logo.php?qq=${req.body.user_id}`; //没有指定谁，那这个朋友就是ta自己
-                }
+                               if (i_have_a_friend_reg.test(req.body.message)) {
+                                    //指定目标的话
+                                    if (has_qq_reg.test(req.body.message)) {
+                                        var msg_in = req.body.message.split("说")[1];
+                                        var msg = msg_in.split("[CQ:at,qq=")[0].trim();
+                                        var who = msg_in.split("[CQ:at,qq=")[1];
+                                        var who = who.replace("]", "").trim();
+                                        if (is_qq_reg.test(who)) {
+                                            var sources = `https://api.sumt.cn/api/qq.logo.php?qq=${who}`; //载入头像
+                                        }
+                                        //没指定目标
+                                    } else {
+                                        var msg = req.body.message.split("说")[1];
+                                        var sources = `https://api.sumt.cn/api/qq.logo.php?qq=${req.body.user_id}`; //没有指定谁，那这个朋友就是ta自己
+                                    }
 
-                loadImage(sources).then((image) => {
-                  let canvas = createCanvas(350, 80);
-                  let ctx = canvas.getContext("2d");
-                  ctx.fillStyle = "WHITE";
-                  ctx.fillRect(0, 0, 350, 80);
-                  ctx.font = "20px SimHei";
-                  ctx.textAlign = "left";
-                  ctx.fillStyle = "#000000";
-                  ctx.fillText("沙雕网友群", 90.5, 35.5);
-                  ctx.font = "16px SimHei";
-                  ctx.fillStyle = "#716F81";
-                  ctx.fillText(`沙雕网友: ${msg}`, 90.5, 55.5);
-                  ctx.font = "13px SimHei";
-                  ctx.fillText(CurentTime(), 280.5, 35.5);
+                                    loadImage(sources).then((image) => {
+                                        let canvas = createCanvas(700, 160);
+                                        let ctx = canvas.getContext("2d");
+                                        ctx.fillStyle = "WHITE";
+                                        ctx.fillRect(0, 0, 700, 160);
+                                        ctx.font = "40px SimHei";
+                                        ctx.textAlign = "left";
+                                        ctx.fillStyle = "#000000";
+                                        ctx.fillText("朋友", 181, 71);
+                                        ctx.font = "32px SimHei";
+                                        ctx.fillStyle = "#716F81";
+                                        ctx.fillText(`${msg}`, 181, 111);
+                                        ctx.font = "26px SimHei";
+                                        ctx.fillText(CurentTime(), 561, 71);
 
-                  ctx.beginPath();
-                  ctx.arc(40, 40, 28, 0, 2 * Math.PI);
-                  ctx.fill();
-                  ctx.clip();
-                  ctx.drawImage(image, 10, 10, 60, 60);
-                  ctx.closePath();
+                                        ctx.beginPath();
+                                        ctx.arc(80, 80, 56, 0, 8 * Math.PI);
+                                        ctx.fill();
+                                        ctx.clip();
+                                        ctx.drawImage(image, 20, 20, 120, 120);
+                                        ctx.closePath();
 
-                  let file_local = path.join(`${process.cwd()}`, `static`, `xiaoye`, `images`, `${sha1(canvas.toBuffer())}.jpg`);
-                  fs.writeFileSync(file_local, canvas.toBuffer());
-                  let file_online = `http://127.0.0.1/xiaoye/images/${sha1(canvas.toBuffer())}.jpg`;
-                  console.log(`我有个朋友合成成功，图片发送：${file_online}`.log);
-                  res.send({
-                    reply: `[CQ:image,file=${file_online},url=${file_online}]`,
-                  });
-                });
-                return 0;
-              }
+                                        let file_local = path.join(`${__dirname}`, `static`, `xiaoye`, `images`, `${sha1(canvas.toBuffer())}.jpg`);
+                                        fs.writeFileSync(file_local, canvas.toBuffer());
+                                        let file_online = `http://127.0.0.1/xiaoye/images/${sha1(canvas.toBuffer())}.jpg`;
+                                        console.log(`我有个朋友合成成功，图片发送：${file_local}`.log);
+                                        res.send({
+                                            reply: `[CQ:image,file=${file_online},url=${file_online}]`,
+                                        });
+                                    });
+                                    return 0;
+                                }
 
               //查询运行状态
               if (req.body.message === "/status") {
